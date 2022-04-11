@@ -1,0 +1,4 @@
+name: IslandCraft
+version: '${version}'
+main: net.riches.islandgenerator.IslandCraft
+api-version: 1.18
