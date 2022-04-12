@@ -1,5 +1,7 @@
 package net.riches.islandgenerator.api;
 
+import org.bukkit.block.Biome;
+
 import java.util.Set;
 
 /**
@@ -24,7 +26,7 @@ public interface ICWorld {
      *            location in the world
      * @return the biome which will be generated
      */
-    ICBiome getBiomeAt(ICLocation location);
+    Biome getBiomeAt(ICLocation location);
 
     /**
      * Returns the biome which will be generated at the given location.
@@ -37,7 +39,7 @@ public interface ICWorld {
      *            blocks)
      * @return the biome which will be generated
      */
-    ICBiome getBiomeAt(int x, int z);
+    Biome getBiomeAt(int x, int z);
 
     /**
      * Returns the biomes for a whole chunk.
@@ -47,7 +49,7 @@ public interface ICWorld {
      * @return an ICBiome[16 * 16] containing the biomes for the whole chunk
      *         such that each element is at index [x + z * 16]
      */
-    ICBiome[] getBiomeChunk(ICLocation location);
+    Biome[] getBiomeChunk(ICLocation location);
 
     /**
      * Returns the biomes for a whole chunk.
@@ -59,7 +61,7 @@ public interface ICWorld {
      * @return an ICBiome[16 * 16] containing the biomes for the whole chunk
      *         such that each element is at index [x + z * 16]
      */
-    ICBiome[] getBiomeChunk(int x, int z);
+    Biome[] getBiomeChunk(int x, int z);
 
     /**
      * Returns the island whose inner-region contains the given location.

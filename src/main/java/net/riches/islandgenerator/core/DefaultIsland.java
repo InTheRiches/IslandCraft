@@ -6,6 +6,7 @@ import net.riches.islandgenerator.api.ICBiome;
 import net.riches.islandgenerator.api.ICRegion;
 import net.riches.islandgenerator.api.IslandGenerator;
 import net.riches.islandgenerator.core.cache.IslandCache;
+import org.bukkit.block.Biome;
 
 public class DefaultIsland implements ICIsland {
     private final IslandCache cache;
@@ -47,27 +48,27 @@ public class DefaultIsland implements ICIsland {
     }
 
     @Override
-    public ICBiome getBiomeAt(final ICLocation relativeLocation) {
+    public Biome getBiomeAt(final ICLocation relativeLocation) {
         return getBiomeAt(relativeLocation.getX(), relativeLocation.getZ());
     }
 
     @Override
-    public ICBiome getBiomeAt(final int relativeX, final int relativeZ) {
+    public Biome getBiomeAt(final int relativeX, final int relativeZ) {
         return cache.biomeAt(this, relativeX, relativeZ);
     }
 
     @Override
-    public ICBiome[] getBiomeChunk(ICLocation relativeLocation) {
+    public Biome[] getBiomeChunk(ICLocation relativeLocation) {
         return getBiomeChunk(relativeLocation.getX(), relativeLocation.getZ());
     }
 
     @Override
-    public ICBiome[] getBiomeChunk(int relativeX, int relativeZ) {
+    public Biome[] getBiomeChunk(int relativeX, int relativeZ) {
         return cache.biomeChunk(this, relativeX, relativeZ);
     }
 
     @Override
-    public ICBiome[] getBiomeAll() {
+    public Biome[] getBiomeAll() {
         return cache.biomeAll(this);
     }
 

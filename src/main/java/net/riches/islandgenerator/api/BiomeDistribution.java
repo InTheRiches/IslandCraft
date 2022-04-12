@@ -1,5 +1,7 @@
 package net.riches.islandgenerator.api;
 
+import org.bukkit.block.Biome;
+
 public interface BiomeDistribution {
     /**
      * Returns the biome to be generated at the given location in a world with
@@ -15,5 +17,5 @@ public interface BiomeDistribution {
      *            the random seed of the world to get the biome from
      * @return the biome to generate
      */
-    ICBiome biomeAt(int x, int z, long worldSeed);
+    Biome biomeAt(int x, int z, long worldSeed);
 }

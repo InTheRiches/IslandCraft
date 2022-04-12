@@ -2,7 +2,12 @@ package net.riches.islandgenerator.core;
 
 import net.riches.islandgenerator.api.*;
 import net.riches.islandgenerator.core.cache.Cache;
+import net.riches.islandgenerator.core.cache.CacheLoader;
+import net.riches.islandgenerator.core.cache.ExpiringLoadingCache;
 import net.riches.islandgenerator.core.cache.IslandCache;
+import net.riches.islandgenerator.core.distribution.ConstantBiomeDistribution;
+import net.riches.islandgenerator.core.distribution.HexagonalIslandDistribution;
+import org.bukkit.block.Biome;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,15 +34,17 @@ public class DefaultWorld implements ICWorld {
         this.cache = cache;
         this.classLoader = classLoader;
 
-        ocean = classLoader.getBiomeDistribution(config.getOcean());
-        islandDistribution = classLoader.getIslandDistribution(config.getIslandDistribution());
-        islandGenerators = new ArrayList<String>(Arrays.asList(config.getIslandGenerstors()));
+        ocean = new ConstantBiomeDistribution(Biome.DEEP_OCEAN.toString());
+        //islandDistribution = classLoader.getIslandDistribution(config.getIslandDistribution());
+        islandDistribution = new HexagonalIslandDistribution("32", "512");
+        islandGenerators = new ArrayList<>(Arrays.asList("net.riches.islandgenerator.core.DefaultIslandGenerator"));
+//        islandGenerators = new ArrayList<>(Arrays.asList(config.getIslandGenerstors()));
         // Load islandGenerators just to make sure there are no errors
         for (final String islandGenerator : islandGenerators) {
             classLoader.getIslandGenerator(islandGenerator);
         }
 
-        databaseCache = new ExpiringLoadingCache<ICLocation, ICIsland>(30, new DatabaseCacheLoader());
+        databaseCache = new ExpiringLoadingCache<>(30, new DatabaseCacheLoader());
     }
 
     @Override
@@ -51,18 +58,18 @@ public class DefaultWorld implements ICWorld {
     }
 
     @Override
-    public ICBiome getBiomeAt(final ICLocation location) {
+    public Biome getBiomeAt(final ICLocation location) {
         return getBiomeAt(location.getX(), location.getZ());
     }
 
     @Override
-    public ICBiome getBiomeAt(final int x, final int z) {
+    public Biome getBiomeAt(final int x, final int z) {
         final ICIsland island = getIslandAt(x, z);
         if (island == null) {
             return ocean.biomeAt(x, z, worldSeed);
         }
         final ICLocation origin = island.getInnerRegion().getMin();
-        final ICBiome biome = island.getBiomeAt(x - origin.getX(), z - origin.getZ());
+        final Biome biome = island.getBiomeAt(x - origin.getX(), z - origin.getZ());
         if (biome == null) {
             return ocean.biomeAt(x, z, worldSeed);
         }
@@ -70,24 +77,24 @@ public class DefaultWorld implements ICWorld {
     }
 
     @Override
-    public ICBiome[] getBiomeChunk(ICLocation location) {
+    public Biome[] getBiomeChunk(ICLocation location) {
         return getBiomeChunk(location.getX(), location.getZ());
     }
 
     @Override
-    public ICBiome[] getBiomeChunk(int x, int z) {
+    public Biome[] getBiomeChunk(int x, int z) {
         final ICIsland island = getIslandAt(x, z);
         if (island == null) {
-            final ICBiome[] chunk = new ICBiome[256];
+            final Biome[] chunk = new Biome[256];
             for (int i = 0; i < 256; ++i) {
                 chunk[i] = ocean.biomeAt(x + i % 16, z + i / 16, worldSeed);
             }
             return chunk;
         }
         final ICLocation origin = island.getInnerRegion().getMin();
-        final ICBiome[] biomes = island.getBiomeChunk(x - origin.getX(), z - origin.getZ());
+        final Biome[] biomes = island.getBiomeChunk(x - origin.getX(), z - origin.getZ());
         if (biomes == null) {
-            final ICBiome[] chunk = new ICBiome[256];
+            final Biome[] chunk = new Biome[256];
             for (int i = 0; i < 256; ++i) {
                 chunk[i] = ocean.biomeAt(x + i % 16, z + i / 16, worldSeed);
             }
@@ -168,6 +175,6 @@ public class DefaultWorld implements ICWorld {
         if (getClass() != obj.getClass())
             return false;
         final DefaultWorld other = (DefaultWorld) obj;
-        return StringUtils.equals(worldName, other.worldName);
+        return worldName.equals(other.worldName);
     }
 }

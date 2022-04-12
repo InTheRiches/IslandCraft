@@ -1,6 +1,11 @@
 package net.riches.islandgenerator.api;
 
+import net.riches.islandgenerator.core.distribution.ConstantBiomeDistribution;
+import net.riches.islandgenerator.core.distribution.EmptyIslandDistribution;
+import net.riches.islandgenerator.core.EmptyIslandGenerator;
+import net.riches.islandgenerator.core.cache.Cache;
 import net.riches.islandgenerator.core.cache.CacheLoader;
+import net.riches.islandgenerator.core.cache.EternalLoadingCache;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -11,17 +16,15 @@ public class ICClassLoader {
     private final Cache<String, BiomeDistribution> biomeDistributionCache;
 
     public ICClassLoader() {
-        islandDistributionCache = new EternalLoadingCache<String, IslandDistribution>(new StringConstructorCacheLoader<IslandDistribution>());
-        islandGeneratorCache = new EternalLoadingCache<String, IslandGenerator>(new StringConstructorCacheLoader<IslandGenerator>());
-        biomeDistributionCache = new EternalLoadingCache<String, BiomeDistribution>(new StringConstructorCacheLoader<BiomeDistribution>());
+        islandDistributionCache = new EternalLoadingCache<>(new StringConstructorCacheLoader<>());
+        islandGeneratorCache = new EternalLoadingCache<>(new StringConstructorCacheLoader<>());
+        biomeDistributionCache = new EternalLoadingCache<>(new StringConstructorCacheLoader<>());
     }
 
     public IslandDistribution getIslandDistribution(final String string) {
         try {
             return islandDistributionCache.get(string);
         } catch (final Exception e) {
-            ICLogger.logger.warning("Error creating IslandDistribution from string: " + string);
-            ICLogger.logger.warning("Using 'com.github.hoqhuuep.islandcraft.core.EmptyIslandDistribution' instead");
             return new EmptyIslandDistribution(new String[0]);
         }
     }
@@ -30,8 +33,6 @@ public class ICClassLoader {
         try {
             return islandGeneratorCache.get(string);
         } catch (final Exception e) {
-            ICLogger.logger.warning("Error creating IslandGenerator from string: " + string);
-            ICLogger.logger.warning("Using 'com.github.hoqhuuep.islandcraft.core.EmptyIslandGenerator' instead");
             return new EmptyIslandGenerator(new String[0]);
         }
     }
@@ -40,8 +41,6 @@ public class ICClassLoader {
         try {
             return biomeDistributionCache.get(string);
         } catch (final Exception e) {
-            ICLogger.logger.warning("Error creating BiomeDistribution from string: " + string);
-            ICLogger.logger.warning("Using 'com.github.hoqhuuep.islandcraft.core.ConstantBiomeDistribution DEEP_OCEAN' instead");
             return new ConstantBiomeDistribution(new String[] { "DEEP_OCEAN" });
         }
     }
