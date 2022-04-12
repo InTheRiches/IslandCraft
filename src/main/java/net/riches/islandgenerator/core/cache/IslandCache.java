@@ -39,7 +39,9 @@ public class IslandCache {
             final int xSize = island.getInnerRegion().getMax().getX() - island.getInnerRegion().getMin().getX();
             final int zSize = island.getInnerRegion().getMax().getZ() - island.getInnerRegion().getMin().getZ();
             final long islandSeed = island.getSeed();
-            return island.getGenerator().generate(xSize, zSize, islandSeed);
+            System.out.println(xSize);
+            System.out.println(zSize);
+            return island.getGenerator().generate( 288, 288, islandSeed);
         }
     }
 }

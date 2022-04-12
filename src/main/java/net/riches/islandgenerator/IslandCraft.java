@@ -36,6 +36,7 @@ public final class IslandCraft extends JavaPlugin {
         this.classLoader = new ICClassLoader();
         this.biomeProvider = new CustomWorldChunkManager();
         this.worldConfig = new WorldConfig("main");
+
         //this.configs.add(new WorldConfig("main"));
         this.getServer().getPluginManager().registerEvents(new WorldListener(), this);
 
