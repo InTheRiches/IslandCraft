@@ -36,7 +36,7 @@ public class DefaultWorld implements ICWorld {
 
         ocean = new ConstantBiomeDistribution(Biome.DEEP_OCEAN.toString());
         //islandDistribution = classLoader.getIslandDistribution(config.getIslandDistribution());
-        islandDistribution = new HexagonalIslandDistribution("32", "512");
+        islandDistribution = new HexagonalIslandDistribution("288", "32");
         islandGenerators = new ArrayList<>(Arrays.asList("net.riches.islandgenerator.core.DefaultIslandGenerator"));
 //        islandGenerators = new ArrayList<>(Arrays.asList(config.getIslandGenerstors()));
         // Load islandGenerators just to make sure there are no errors
