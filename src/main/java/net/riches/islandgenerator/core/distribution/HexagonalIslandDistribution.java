@@ -32,7 +32,7 @@ public class HexagonalIslandDistribution implements IslandDistribution {
         if (oceanSize <= 0 || oceanSize % 32 != 0) {
             throw new IllegalArgumentException("HexagonalIslandDistribution.ocean-size must be a positive multiple of 32");
         }
-        islandSeparation = islandSize + oceanSize;
+        islandSeparation = 512;
         twiceIslandSeparation = islandSeparation * 2;
         halfIslandSeparation = islandSeparation / 2;
         innerRadius = islandSize / 2;

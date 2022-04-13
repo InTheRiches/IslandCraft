@@ -67,7 +67,7 @@ public final class IslandCraft extends JavaPlugin {
 //        return super.getDefaultBiomeProvider(worldName, id);
 //    }
 
-    public BiomeProvider getBiomeProvider() {
+    public CustomWorldChunkManager getBiomeProvider() {
         return biomeProvider;
     }
 

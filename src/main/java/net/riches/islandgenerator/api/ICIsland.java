@@ -9,11 +9,6 @@ public interface ICIsland {
     long getSeed();
 
     /**
-     * Returns the IslandGenerator used to generate this island.
-     */
-    IslandGenerator getGenerator();
-
-    /**
      * Returns the location of the center of this island.
      */
     ICLocation getCenter();

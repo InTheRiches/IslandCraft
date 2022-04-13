@@ -1,18 +1,14 @@
 package net.riches.islandgenerator.core;
 
 public interface IslandDatabase {
-    record Result(long islandSeed, String generator) {
+    record Result(long islandSeed) {
 
         public long getIslandSeed() {
             return islandSeed;
         }
-
-        public String getGenerator() {
-            return generator;
-        }
     }
 
-    void save(String worldName, int centerX, int centerZ, long islandSeed, String generator);
+    void save(String worldName, int centerX, int centerZ, long islandSeed);
 
     Result load(String worldName, int centerX, int centerZ);
 

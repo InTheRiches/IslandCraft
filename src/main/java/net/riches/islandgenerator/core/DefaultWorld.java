@@ -1,5 +1,6 @@
 package net.riches.islandgenerator.core;
 
+import net.riches.islandgenerator.IslandCraft;
 import net.riches.islandgenerator.api.*;
 import net.riches.islandgenerator.core.cache.Cache;
 import net.riches.islandgenerator.core.cache.CacheLoader;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class DefaultWorld implements ICWorld {
     private final String worldName;
@@ -22,7 +24,7 @@ public class DefaultWorld implements ICWorld {
     private final IslandDatabase database;
     private final BiomeDistribution ocean;
     private final IslandDistribution islandDistribution;
-    private final List<String> islandGenerators;
+    private final List<IslandGenerator> islandGenerators;
     private final IslandCache cache;
     private final ICClassLoader classLoader;
     private final Cache<ICLocation, ICIsland> databaseCache;
@@ -37,11 +39,12 @@ public class DefaultWorld implements ICWorld {
         ocean = new ConstantBiomeDistribution(Biome.DEEP_OCEAN.toString());
         //islandDistribution = classLoader.getIslandDistribution(config.getIslandDistribution());
         islandDistribution = new HexagonalIslandDistribution("288", "32");
-        islandGenerators = new ArrayList<>(Arrays.asList("net.riches.islandgenerator.core.DefaultIslandGenerator"));
+        islandGenerators = new ArrayList<>();
+        List<String> gens = new ArrayList<>(Arrays.asList("net.riches.islandgenerator.core.DefaultIslandGenerator"));
 //        islandGenerators = new ArrayList<>(Arrays.asList(config.getIslandGenerstors()));
         // Load islandGenerators just to make sure there are no errors
-        for (final String islandGenerator : islandGenerators) {
-            classLoader.getIslandGenerator(islandGenerator);
+        for (final String islandGenerator : gens) {
+            islandGenerators.add(classLoader.getIslandGenerator(islandGenerator));
         }
 
         databaseCache = new ExpiringLoadingCache<>(30, new DatabaseCacheLoader());
@@ -66,12 +69,14 @@ public class DefaultWorld implements ICWorld {
     public Biome getBiomeAt(final int x, final int z) {
         final ICIsland island = getIslandAt(x, z);
         if (island == null) {
-            return ocean.biomeAt(x, z, worldSeed);
+            return Biome.DEEP_OCEAN;
         }
         final ICLocation origin = island.getInnerRegion().getMin();
         final Biome biome = island.getBiomeAt(x - origin.getX(), z - origin.getZ());
         if (biome == null) {
-            return ocean.biomeAt(x, z, worldSeed);
+//            IslandCraft.getInstance().getLogger().log(Level.SEVERE, "Biome is null");
+            return Biome.DEEP_OCEAN;
+//            return ocean.biomeAt(x, z, worldSeed);
         }
         return biome;
     }
@@ -145,18 +150,24 @@ public class DefaultWorld implements ICWorld {
             final IslandDatabase.Result fromDatabase = database.load(worldName, center.getX(), center.getZ());
             if (fromDatabase == null) {
                 final long islandSeed = pickIslandSeed(center.getX(), center.getZ());
-                final String generator = pickIslandGenerator(islandSeed);
-                database.save(worldName, center.getX(), center.getZ(), islandSeed, generator);
-                return new DefaultIsland(innerRegion, outerRegion, islandSeed, classLoader.getIslandGenerator(generator), cache);
+                final IslandGenerator generator = pickIslandGenerator(islandSeed);
+                database.save(worldName, center.getX(), center.getZ(), islandSeed);
+
+                ICIsland island = new DefaultIsland(innerRegion, outerRegion, islandSeed, cache);
+                final int xSize = island.getInnerRegion().getMax().getX() - island.getInnerRegion().getMin().getX();
+                final int zSize = island.getInnerRegion().getMax().getZ() - island.getInnerRegion().getMin().getZ();
+
+                cache.addIsland(island, pickIslandGenerator(islandSeed).generate(xSize, zSize, islandSeed));
+                return island;
             }
-            return new DefaultIsland(innerRegion, outerRegion, fromDatabase.getIslandSeed(), classLoader.getIslandGenerator(fromDatabase.getGenerator()), cache);
+            return new DefaultIsland(innerRegion, outerRegion, fromDatabase.getIslandSeed(), cache);
         }
 
         private long pickIslandSeed(final int centerX, final int centerZ) {
             return new Random(worldSeed ^ ((long) centerX << 24 | centerZ & 0x00FFFFFFL)).nextLong();
         }
 
-        private String pickIslandGenerator(final long islandSeed) {
+        private IslandGenerator pickIslandGenerator(final long islandSeed) {
             return islandGenerators.get(new Random(islandSeed).nextInt(islandGenerators.size()));
         }
     }

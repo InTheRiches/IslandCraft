@@ -39,4 +39,8 @@ public class CustomWorldChunkManager extends BiomeProvider {
     public void addWorld(ICWorld world) {
         this.worlds.add(world);
     }
+
+    public Biome getBiome(int x, int z) {
+        return worlds.get(0).getBiomeAt(x, z);
+    }
 }

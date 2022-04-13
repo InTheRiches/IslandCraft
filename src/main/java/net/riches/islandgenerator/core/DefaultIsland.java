@@ -10,16 +10,14 @@ import org.bukkit.block.Biome;
 
 public class DefaultIsland implements ICIsland {
     private final IslandCache cache;
-    private final IslandGenerator generator;
     private final ICLocation center;
     private final ICRegion innerRegion;
     private final ICRegion outerRegion;
     private final long seed;
 
-    public DefaultIsland(final ICRegion innerRegion, final ICRegion outerRegion, final long seed, final IslandGenerator generator, final IslandCache cache) {
+    public DefaultIsland(final ICRegion innerRegion, final ICRegion outerRegion, final long seed, final IslandCache cache) {
         this.cache = cache;
         this.seed = seed;
-        this.generator = generator;
         final int centerX = (innerRegion.getMin().getX() + innerRegion.getMax().getX()) / 2;
         final int centerZ = (innerRegion.getMin().getZ() + innerRegion.getMax().getZ()) / 2;
         this.center = new ICLocation(centerX, centerZ);
@@ -73,15 +71,9 @@ public class DefaultIsland implements ICIsland {
     }
 
     @Override
-    public IslandGenerator getGenerator() {
-        return generator;
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((generator == null) ? 0 : generator.hashCode());
         result = prime * result + ((innerRegion == null) ? 0 : innerRegion.hashCode());
         result = prime * result + ((outerRegion == null) ? 0 : outerRegion.hashCode());
         result = prime * result + (int) (seed ^ (seed >>> 32));
@@ -97,11 +89,6 @@ public class DefaultIsland implements ICIsland {
         if (getClass() != obj.getClass())
             return false;
         DefaultIsland other = (DefaultIsland) obj;
-        if (generator == null) {
-            if (other.generator != null)
-                return false;
-        } else if (!generator.equals(other.generator))
-            return false;
         if (innerRegion == null) {
             if (other.innerRegion != null)
                 return false;

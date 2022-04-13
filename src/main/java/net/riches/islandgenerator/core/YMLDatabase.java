@@ -1,6 +1,7 @@
 package net.riches.islandgenerator.core;
 
 import net.riches.islandgenerator.IslandCraft;
+import net.riches.islandgenerator.api.IslandGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,13 +28,17 @@ public class YMLDatabase implements IslandDatabase {
     }
 
     @Override
-    public void save(String worldName, int centerX, int centerZ, long islandSeed, String generator) {
+    public void save(String worldName, int centerX, int centerZ, long islandSeed) {
         int count = getCount();
         config.set("config.islands." + count + ".worldname", worldName);
         config.set("config.islands." + count + ".centerX", centerX);
         config.set("config.islands." + count + ".centerZ", centerZ);
         config.set("config.islands." + count + ".seed", islandSeed);
-        config.set("config.islands." + count + ".generator", generator);
+        try {
+            config.save(new File(IslandCraft.getInstance().getDataFolder(), "islands.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -42,7 +47,7 @@ public class YMLDatabase implements IslandDatabase {
             if (!config.getString("config.islands." + i + ".worldname").equals(worldName)) continue;
             if (config.getInt("config.islands." + i + ".centerX") != centerX) continue;
             if (config.getInt("config.islands." + i + ".centerZ") != centerZ) continue;
-            return new Result(config.getLong("config.islands." + i + ".seed"), config.getString("config.islands." + i + ".generator"));
+            return new Result(config.getLong("config.islands." + i + ".seed"));
         }
         return null;
     }

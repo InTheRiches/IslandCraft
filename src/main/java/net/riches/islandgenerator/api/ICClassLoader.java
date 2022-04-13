@@ -1,5 +1,6 @@
 package net.riches.islandgenerator.api;
 
+import net.riches.islandgenerator.core.DefaultIslandGenerator;
 import net.riches.islandgenerator.core.distribution.ConstantBiomeDistribution;
 import net.riches.islandgenerator.core.distribution.EmptyIslandDistribution;
 import net.riches.islandgenerator.core.EmptyIslandGenerator;
@@ -30,18 +31,14 @@ public class ICClassLoader {
     }
 
     public IslandGenerator getIslandGenerator(final String string) {
-        try {
-            return islandGeneratorCache.get(string);
-        } catch (final Exception e) {
-            return new EmptyIslandGenerator(new String[0]);
-        }
+        return new DefaultIslandGenerator();
     }
 
     public BiomeDistribution getBiomeDistribution(final String string) {
         try {
             return biomeDistributionCache.get(string);
         } catch (final Exception e) {
-            return new ConstantBiomeDistribution(new String[] { "DEEP_OCEAN" });
+            return new ConstantBiomeDistribution("DEEP_OCEAN");
         }
     }
 
