@@ -41,13 +41,19 @@ public class DefaultIslandGenerator implements IslandGenerator {
 //            throw new IllegalArgumentException("IslandGeneratorAlpha requires 9 parameters");
 //        }
         ocean = new Color(ICBiome.getOverworldBiomes().size(), true);
-        normal = biomeColor(Biome.DEEP_OCEAN.toString(), ocean);
-        mountains = biomeColor(Biome.WINDSWEPT_HILLS.toString(), normal);
-        hills = biomeColor(Biome.WINDSWEPT_GRAVELLY_HILLS.toString(), normal);
-        forest = biomeColor(Biome.BIRCH_FOREST.toString(), normal);
-        forestMountains = biomeColor(Biome.WINDSWEPT_FOREST.toString(), forest);
-        outerCoast = biomeColor(Biome.BEACH.toString(), normal);
-        innerCoast = biomeColor(Biome.PLAINS.toString(), normal);
+        normal = biomeColor(Biome.WARM_OCEAN.toString(), ocean);
+        mountains = biomeColor(Biome.WARM_OCEAN.toString(), normal);
+        hills = biomeColor(Biome.WARM_OCEAN.toString(), normal);
+        forest = biomeColor(Biome.WARM_OCEAN.toString(), normal);
+        forestMountains = biomeColor(Biome.WARM_OCEAN.toString(), forest);
+        outerCoast = biomeColor(Biome.WARM_OCEAN.toString(), normal);
+        innerCoast = biomeColor(Biome.WARM_OCEAN.toString(), normal);
+//        mountains = biomeColor(Biome.WINDSWEPT_HILLS.toString(), normal);
+//        hills = biomeColor(Biome.WINDSWEPT_GRAVELLY_HILLS.toString(), normal);
+//        forest = biomeColor(Biome.BIRCH_FOREST.toString(), normal);
+//        forestMountains = biomeColor(Biome.WINDSWEPT_FOREST.toString(), forest);
+//        outerCoast = biomeColor(Biome.BEACH.toString(), normal);
+//        innerCoast = biomeColor(Biome.PLAINS.toString(), normal);
         // river = biomeColor(args[8], normal); // unused for now
     }
 

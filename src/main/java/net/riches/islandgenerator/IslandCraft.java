@@ -6,6 +6,8 @@ import net.riches.islandgenerator.core.WorldConfig;
 import net.riches.islandgenerator.core.YMLDatabase;
 import net.riches.islandgenerator.core.cache.IslandCache;
 import net.riches.islandgenerator.events.WorldListener;
+import org.bukkit.Chunk;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
