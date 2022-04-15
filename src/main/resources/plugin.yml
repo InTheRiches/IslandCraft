@@ -2,6 +2,7 @@ name: IslandCraft
 version: '${version}'
 main: net.riches.islandgenerator.IslandCraft
 api-version: 1.18
+load: STARTUP
 worlds:
   world:
     biome-provider: <plugin-name>:<extra-custom-data>
